@@ -1,11 +1,6 @@
-import { AnswerQuestionUseCase } from './answer-question'
-import { AnswersRepository } from '@/domain/forum/application/repositories/answers-repository'
-import { Answer } from '../../enterprise/entities/answer'
-import { QuestionsRepository } from '../repositories/questions-repository'
-import { Question } from '../../enterprise/entities/question'
-import { CreateQuestionUseCase } from './create-question'
 import { InMemoryQuestionsRepository } from 'test/repositories/in-memory-questions-repository'
 import { GetQuestionBySlugUseCase } from './get-question-by-slug'
+import { makeQuestion } from 'test/factories/make-question'
 import { Slug } from '../../enterprise/entities/value-objects/slug'
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
@@ -18,11 +13,8 @@ describe('Get Question By Slug', () => {
   })
 
   it('should be able to get a question', async () => {
-    const newQuestion = Question.create({
-      title: 'Example question',
+    const newQuestion = makeQuestion({
       slug: Slug.create('example-question'),
-      authorId: '1',
-      content: 'Example content',
     })
 
     inMemoryQuestionsRepository.create(newQuestion)
@@ -32,5 +24,6 @@ describe('Get Question By Slug', () => {
     })
 
     expect(question.id).toBeTruthy()
+    expect(question.title).toEqual(newQuestion.title)
   })
 })
